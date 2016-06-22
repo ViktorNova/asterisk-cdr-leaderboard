@@ -1,0 +1,23 @@
+body {
+	background: url('background.jpg');
+}
+
+
+
+table {
+       	background-color: rgba(0,0,0,0.6);
+	color: #99aaff;
+	font-size: 3em;
+	
+}
+
+
+.oddRows {
+       	background-color: #99aaff;
+	color: #000;
+	border-color: #99aaff;
+}
+
+
+
+
