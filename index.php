@@ -254,7 +254,8 @@ foreach($data as $srckey=>$srcval){
 	</table>
 <!------------------------------------------- -->
 
-<img style="float: right;margin-top: 1em;" src="templates/images/SmartChoicePayments.png" id="logo">
+<img style="float: right;margin-top: 1em;" src="templates/images/logo.png" id="logo">
+
 </body>
 </html>
 
