@@ -73,8 +73,11 @@ foreach ($sth as $row) {
 </head>
 <body>
 
-				<h1 style="text-align: left; display: block; background: #333; color: #fff; padding-left: .25em;">Today's Call Records</h1>
-				<table border=0>
+<h1 class="pageHeader">Today's Call Records</h1>
+
+<!-- TABLE 1 -->
+<table class="callboard" id="callboard_1">
+
 <?php
 foreach($header as $hlastappkey=>$hlastappval){
 	$colcnt=0;
@@ -184,7 +187,9 @@ foreach ($sth as $row) {
 //<link rel="shortcut icon" href="templates/images/favicon.ico" />
 ?>
 
-<table border=0>
+<!-- TABLE 2 -->
+<table class="callboard" id="callboard_2">
+
 <?php
 foreach($header as $hlastappkey=>$hlastappval){
 	$colcnt=0;
@@ -254,7 +259,6 @@ foreach($data as $srckey=>$srcval){
 	</table>
 <!------------------------------------------- -->
 
-<img style="float: right;margin-top: 1em;" src="templates/images/logo.png" id="logo">
 
 </body>
 </html>
