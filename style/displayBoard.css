@@ -1,5 +1,9 @@
 body {
+	background-color: #000966;
 	background: url('background.jpg');
+	background-size: cover;
+	background-placement: center center;
+	font-family: 'Oswald', sans-serif, sans;
 }
 
 h1.pageHeader {
