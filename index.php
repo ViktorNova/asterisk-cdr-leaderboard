@@ -70,6 +70,7 @@ foreach ($sth as $row) {
 	<link rel="stylesheet" href="style/screen.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="style/displayBoard.css" type="text/css" media="screen" />
 	<link rel="shortcut icon" href="templates/images/favicon.ico" />
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
 </head>
 <body>
 
