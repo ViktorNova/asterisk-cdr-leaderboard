@@ -32,7 +32,7 @@ foreach ($sth as $row) {
 // COLUMN 1
 // Select data from database and add to array
 
-$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '200' and '239' order by src, lastapp, disposition";
+$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '200' and '299' order by src, lastapp, disposition";
 try {
 	$sth = $dbh->query($query);
 }
@@ -112,6 +112,7 @@ foreach($header as $hlastappkey=>$hlastappval){
 						<?php //echo $bothead;?>
 					</tr>
 	
+// TRY SORTING THE $data ARRAY HERE!!
 <?php				
 foreach($data as $srckey=>$srcval){
 			if($changebkgr){
@@ -161,7 +162,7 @@ unset($data);   //clears the data from the last table
 unset($Grdata); //clears the Total Calls from the last table
 
 // Select data from database and add to array
-$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '240' and '300' order by src, lastapp, disposition";
+$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '300' and '399' order by src, lastapp, disposition";
 try {
 	$sth = $dbh->query($query);
 }
@@ -198,7 +199,7 @@ foreach ($sth as $row) {
 //<link rel="shortcut icon" href="templates/images/favicon.ico" />
 ?>
 
-<!-- TABLE 2 -->
+<!-- COLUMN 2 -->
 <table class="callboard" id="callboard_2">
 
 <?php
