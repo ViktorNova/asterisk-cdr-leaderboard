@@ -32,7 +32,7 @@ foreach ($sth as $row) {
 // COLUMN 1
 // Select data from database and add to array
 
-$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '400' and '500' order by src, lastapp, disposition";
+$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '200' and '239' order by src, lastapp, disposition";
 try {
 	$sth = $dbh->query($query);
 }
@@ -45,14 +45,19 @@ if (!$sth) {
 	print_r($dbh->errorInfo());
 	die;
 }
-
+//	COLUMNS DISPLAYED
 //add to array
 foreach ($sth as $row) {
 	$Grdata['Grand Total Calls'] += 1 ;
 	
 	$data[$row['src']]['Total Calls'] += 1 ;
 	$datacal[$row['src']]['Total Dur'] += $row['duration'] ;
-	$data[$row['src']]['AvgDur'] = date('i:s', $datacal[$row['src']]['Total Dur'] / $data[$row['src']]['Total Calls']);
+
+//	Total time on the phone	
+	$data[$row['src']]['Talk Time'] = date('i:s', $datacal[$row['src']]['Total Dur'] / 1);
+
+//	Average Duration	
+	//$data[$row['src']]['AvgDur'] = date('i:s', $datacal[$row['src']]['Total Dur'] / $data[$row['src']]['Total Calls']);
 			
 	$Grdata[$row['lastapp']][$row['disposition']]['Grand Total Calls'] += 1 ;
 	
@@ -102,8 +107,8 @@ foreach($header as $hlastappkey=>$hlastappval){
 					-->
 					<tr class="tableHeader">
 						<th class="extention">Extension</th>
-						<th class="total">Total Calls</th>
-						<th class="length">Avg Length</th>
+						<th class="total">Calls</th>
+						<th class="length">Talk Time</th>
 						<?php //echo $bothead;?>
 					</tr>
 	
@@ -116,7 +121,7 @@ foreach($data as $srckey=>$srcval){
 			}
 			  
 			  echo '<tr '.$changebkgr.'>
-						<td>'.$srckey.'</td><td align="right">'.$srcval['Total Calls'].'</td><td align="right">'.$srcval['AvgDur'].'</td>';
+						<td>'.$srckey.'</td><td align="right">'.$srcval['Total Calls'].'</td><td align="right">'.$srcval['Talk Time'].'</td>';
 	foreach($srcval as $appkey=>$appval){
 		foreach($appval as $dispkey=>$dispval){
 			foreach($dispval as $totkey=>$totpval){
@@ -129,7 +134,7 @@ foreach($data as $srckey=>$srcval){
 ?>
 					<tr>					
 						<th>&nbsp;</th>
-						<th align="right">Total Calls: <?php echo $Grdata['Grand Total Calls'];?></th>
+						<th align="right">Total: <?php echo $Grdata['Grand Total Calls'];?></th>
 <?php
 	foreach($Grdata as $appkey=>$appval){
 		foreach($appval as $dispkey=>$dispval){
@@ -156,7 +161,7 @@ unset($data);   //clears the data from the last table
 unset($Grdata); //clears the Total Calls from the last table
 
 // Select data from database and add to array
-$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '1000' and '2000' order by src, lastapp, disposition";
+$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '240' and '300' order by src, lastapp, disposition";
 try {
 	$sth = $dbh->query($query);
 }
@@ -176,7 +181,12 @@ foreach ($sth as $row) {
 	
 	$data[$row['src']]['Total Calls'] += 1 ;
 	$datacal[$row['src']]['Total Dur'] += $row['duration'] ;
-	$data[$row['src']]['AvgDur'] = date('i:s', $datacal[$row['src']]['Total Dur'] / $data[$row['src']]['Total Calls']);
+	
+//	Total time on the phone	
+	$data[$row['src']]['Talk Time'] = date('i:s', $datacal[$row['src']]['Total Dur'] / 1);
+
+//	Average Duration	
+	//$data[$row['src']]['AvgDur'] = date('i:s', $datacal[$row['src']]['Total Dur'] / $data[$row['src']]['Total Calls']);
 			
 	$Grdata[$row['lastapp']][$row['disposition']]['Grand Total Calls'] += 1 ;
 	
@@ -214,8 +224,8 @@ foreach($header as $hlastappkey=>$hlastappval){
 					-->
 					<tr class="tableHeader">
 						<th class="extention">Extension</th>
-						<th class="total">Total Calls</th>
-						<th class="length">Avg Length</th>
+						<th class="total">Calls</th>
+						<th class="length">Talk Time</th>
 						<?php //echo $bothead;?>
 					</tr>
 	
@@ -228,7 +238,7 @@ foreach($data as $srckey=>$srcval){
 			}
 			  
 			  echo '<tr '.$changebkgr.'>
-						<td>'.$srckey.'</td><td align="right">'.$srcval['Total Calls'].'</td><td align="right">'.$srcval['AvgDur'].'</td>';
+						<td>'.$srckey.'</td><td align="right">'.$srcval['Total Calls'].'</td><td align="right">'.$srcval['Talk Time'].'</td>';
 	foreach($srcval as $appkey=>$appval){
 		foreach($appval as $dispkey=>$dispval){
 			foreach($dispval as $totkey=>$totpval){
@@ -241,7 +251,7 @@ foreach($data as $srckey=>$srcval){
 ?>
 					<tr>					
 						<th>&nbsp;</th>
-						<th align="right">Total Calls: <?php echo $Grdata['Grand Total Calls'];?></th>
+						<th align="right">Total: <?php echo $Grdata['Grand Total Calls'];?></th>
 <?php
 	foreach($Grdata as $appkey=>$appval){
 		foreach($appval as $dispkey=>$dispval){
