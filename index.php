@@ -17,7 +17,7 @@ catch (PDOException $e) {
 // Select data from database and add to array
 
 $query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '200' and '299' order by src, lastapp, disposition";
-//$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = '2016-04-26' and CHAR_LENGTH(src) < 5 and src between '200' and '299' order by src, lastapp, disposition";
+
 try {
 	$sth = $dbh->query($query);
 }
@@ -30,7 +30,8 @@ if (!$sth) {
 	print_r($dbh->errorInfo());
 	die;
 }
-//	COLUMNS DISPLAYED
+
+//COLUMNS DISPLAYED
 //add to array
 //$idx=0;
 foreach ($sth as $row) {
@@ -43,9 +44,20 @@ foreach ($sth as $row) {
 //	Total time on the phone	
 	$data[$row['src']]['Talk Time'] = date('i:s', $datacal[$row['src']]['Total Dur'] / 1);
 
-//	Average Duration		
+//	Unused columns (uncomment to add them back)
+//	Average Duration	
+//	data[$row['src']]['AvgDur'] = date('i:s', $datacal[$row['src']]['Total Dur'] / $data[$row['src']]['Total Calls']);
+
+
+//	$data[$row['src']][$row['lastapp']][$row['disposition']]['Total Calls'] += 1 ;
+//	$datacal[$row['src']][$row['lastapp']][$row['disposition']]['Total Dur'] += $row['duration'] ;
+//	$data[$row['src']][$row['lastapp']][$row['disposition']]['Avg Dur'] = date('i:s', $datacal[$row['src']][$row['lastapp']][$row['disposition']]['Total Dur'] / $data[$row['src']][$row['lastapp']][$row['disposition']]['Total Calls']);
+
+//	Total at bottom
 	$Grdata[$row['lastapp']][$row['disposition']]['Grand Total Calls'] += 1 ;
+
 }
+
 
 // Sort the data with Total Calls descending
 // Add $data as the last parameter, to sort by the common key
@@ -69,7 +81,7 @@ array_multisort($volume, SORT_DESC, SORT_NUMERIC, $data);
 
 <h1 class="pageHeader">Today's Call Records</h1>
 
-<!-- TABLE 1 -->
+<!-- COLUMN 1 -->
 <table class="callboard" id="callboard_1">
 
 <?php
@@ -102,29 +114,29 @@ foreach($header as $hlastappkey=>$hlastappval){
 	
 
 <?php				
-// TRY SORTING THE $data ARRAY HERE!!
 foreach($data as $srckey=>$srcval){
-			if($changebkgr){
-			  	$changebkgr= '';
-			}else{
-				$changebkgr= 'class="oddRows"';
-			}
-			  
-			  echo '<tr '.$changebkgr.'>
-						<td>'.$srcval['src'].'</td><td align="right">'.$srcval['Total Calls'].'</td><td align="right">'.$srcval['Talk Time'].'</td>';
+	if($changebkgr){
+	  	$changebkgr= '';
+	}else{
+		$changebkgr= 'class="oddRows"';
+	}
+	  
+	echo '<tr '.$changebkgr.'>
+		<td>'.$srcval['src'].'</td><td align="right">'.$srcval['Total Calls'].'</td>
+		<td align="right">'.$srcval['Talk Time'].'</td>';
 	foreach($srcval as $appkey=>$appval){
-		foreach($appval as $dispkey=>$dispval){
-			foreach($dispval as $totkey=>$totpval){
-				  echo '<td align="right">'.$totpval.'</td>';
-			}
-		}
-	}		 
-			  echo '</tr>';
+	 foreach($appval as $dispkey=>$dispval){
+	  foreach($dispval as $totkey=>$totpval){
+	   echo '<td align="right">'.$totpval.'</td>';
+		  }
+		 }
+		}		 
+	  echo '</tr>';
 }
 ?>
-					<tr>					
-						<th>&nbsp;</th>
-						<th align="right">Total: <?php echo $Grdata['Grand Total Calls'];?></th>
+		<tr>					
+		<th>&nbsp;</th>
+		<th align="right">Total: <?php echo $Grdata['Grand Total Calls'];?></th>
 <?php
 	foreach($Grdata as $appkey=>$appval){
 		foreach($appval as $dispkey=>$dispval){
@@ -136,10 +148,10 @@ foreach($data as $srckey=>$srcval){
 	}
 
 ?>
-					</tr>
-				</table>
-			</td>
-		</tr>
+	</tr>
+	</table>
+	</td>
+	</tr>
 	</table>
 <!--
 END COLUMN 1 --------------------------------------------------------------------
