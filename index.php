@@ -13,26 +13,11 @@ catch (PDOException $e) {
 		die;
 }
 
-// Select header data from database
-$query = "SELECT lastapp, disposition, count(disposition) FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() group by lastapp, disposition";
-
-//Prepare Line header array
-foreach ($sth as $row) {
-	foreach($header as $hlastappkey=>$hlastappval){
-		foreach($hlastappval as $hdispkey=>$hdispval){
-			foreach($hdispval as $hdurkey=>$hdurpval){
-				$data[$row['src']][$hlastappkey][$hdispkey]['Total Calls'] = 0 ;
-				$data[$row['src']][$hlastappkey][$hdispkey]['Avg Dur'] = 0 ;
-				$Grdata[$hlastappkey][$hdispkey]['Grand Total Calls'] = 0 ;
-			}
-		}
-	}
-}
-
 // COLUMN 1
 // Select data from database and add to array
 
 $query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '200' and '299' order by src, lastapp, disposition";
+//$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = '2016-04-26' and CHAR_LENGTH(src) < 5 and src between '200' and '299' order by src, lastapp, disposition";
 try {
 	$sth = $dbh->query($query);
 }
@@ -47,26 +32,29 @@ if (!$sth) {
 }
 //	COLUMNS DISPLAYED
 //add to array
+//$idx=0;
 foreach ($sth as $row) {
 	$Grdata['Grand Total Calls'] += 1 ;
 	
+	$data[$row['src']]['src'] =$row['src'] ;
 	$data[$row['src']]['Total Calls'] += 1 ;
 	$datacal[$row['src']]['Total Dur'] += $row['duration'] ;
 
 //	Total time on the phone	
 	$data[$row['src']]['Talk Time'] = date('i:s', $datacal[$row['src']]['Total Dur'] / 1);
 
-//	Average Duration	
-	//$data[$row['src']]['AvgDur'] = date('i:s', $datacal[$row['src']]['Total Dur'] / $data[$row['src']]['Total Calls']);
-			
+//	Average Duration		
 	$Grdata[$row['lastapp']][$row['disposition']]['Grand Total Calls'] += 1 ;
-	
-//	$data[$row['src']][$row['lastapp']][$row['disposition']]['Total Calls'] += 1 ;
-//	$datacal[$row['src']][$row['lastapp']][$row['disposition']]['Total Dur'] += $row['duration'] ;
-//	$data[$row['src']][$row['lastapp']][$row['disposition']]['Avg Dur'] = date('i:s', $datacal[$row['src']][$row['lastapp']][$row['disposition']]['Total Dur'] / $data[$row['src']][$row['lastapp']][$row['disposition']]['Total Calls']);
 }
-//die;
-//<link rel="shortcut icon" href="templates/images/favicon.ico" />
+
+// Sort the data with Total Calls descending
+// Add $data as the last parameter, to sort by the common key
+foreach ($data as $key => $row) {
+	$volume[$key]  = $row['Total Calls'];
+}
+array_multisort($volume, SORT_DESC, SORT_NUMERIC, $data);
+
+
 ?>
 
 <head>
@@ -112,8 +100,9 @@ foreach($header as $hlastappkey=>$hlastappval){
 						<?php //echo $bothead;?>
 					</tr>
 	
-// TRY SORTING THE $data ARRAY HERE!!
+
 <?php				
+// TRY SORTING THE $data ARRAY HERE!!
 foreach($data as $srckey=>$srcval){
 			if($changebkgr){
 			  	$changebkgr= '';
@@ -122,7 +111,7 @@ foreach($data as $srckey=>$srcval){
 			}
 			  
 			  echo '<tr '.$changebkgr.'>
-						<td>'.$srckey.'</td><td align="right">'.$srcval['Total Calls'].'</td><td align="right">'.$srcval['Talk Time'].'</td>';
+						<td>'.$srcval['src'].'</td><td align="right">'.$srcval['Total Calls'].'</td><td align="right">'.$srcval['Talk Time'].'</td>';
 	foreach($srcval as $appkey=>$appval){
 		foreach($appval as $dispkey=>$dispval){
 			foreach($dispval as $totkey=>$totpval){
@@ -163,6 +152,8 @@ unset($Grdata); //clears the Total Calls from the last table
 
 // Select data from database and add to array
 $query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '300' and '399' order by src, lastapp, disposition";
+//$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = '2016-04-26' and CHAR_LENGTH(src) < 5 and src between '300' and '399' order by src, lastapp, disposition";
+
 try {
 	$sth = $dbh->query($query);
 }
@@ -180,23 +171,23 @@ if (!$sth) {
 foreach ($sth as $row) {
 	$Grdata['Grand Total Calls'] += 1 ;
 	
+	$data[$row['src']]['src'] =$row['src'] ;
 	$data[$row['src']]['Total Calls'] += 1 ;
 	$datacal[$row['src']]['Total Dur'] += $row['duration'] ;
 	
 //	Total time on the phone	
 	$data[$row['src']]['Talk Time'] = date('i:s', $datacal[$row['src']]['Total Dur'] / 1);
 
-//	Average Duration	
-	//$data[$row['src']]['AvgDur'] = date('i:s', $datacal[$row['src']]['Total Dur'] / $data[$row['src']]['Total Calls']);
-			
+//	Average Duration		
 	$Grdata[$row['lastapp']][$row['disposition']]['Grand Total Calls'] += 1 ;
-	
-//	$data[$row['src']][$row['lastapp']][$row['disposition']]['Total Calls'] += 1 ;
-//	$datacal[$row['src']][$row['lastapp']][$row['disposition']]['Total Dur'] += $row['duration'] ;
-//	$data[$row['src']][$row['lastapp']][$row['disposition']]['Avg Dur'] = date('i:s', $datacal[$row['src']][$row['lastapp']][$row['disposition']]['Total Dur'] / $data[$row['src']][$row['lastapp']][$row['disposition']]['Total Calls']);
 }
-//die;
-//<link rel="shortcut icon" href="templates/images/favicon.ico" />
+
+// Sort the data with Total Calls descending
+// Add $data as the last parameter, to sort by the common key
+foreach ($data as $key => $row) {
+	$volume[$key]  = $row['Total Calls'];
+}
+array_multisort($volume, SORT_DESC, SORT_NUMERIC, $data);
 ?>
 
 <!-- COLUMN 2 -->
@@ -239,7 +230,7 @@ foreach($data as $srckey=>$srcval){
 			}
 			  
 			  echo '<tr '.$changebkgr.'>
-						<td>'.$srckey.'</td><td align="right">'.$srcval['Total Calls'].'</td><td align="right">'.$srcval['Talk Time'].'</td>';
+						<td>'.$srcval['src'].'</td><td align="right">'.$srcval['Total Calls'].'</td><td align="right">'.$srcval['Talk Time'].'</td>';
 	foreach($srcval as $appkey=>$appval){
 		foreach($appval as $dispkey=>$dispval){
 			foreach($dispval as $totkey=>$totpval){
