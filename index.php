@@ -16,7 +16,7 @@ catch (PDOException $e) {
 // COLUMN 1
 
 // Select data from database and add to array
-$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '200' and '299' order by src, lastapp, disposition";
+$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '400' and '499' order by src, lastapp, disposition";
 
 try {
 	$sth = $dbh->query($query);
@@ -167,7 +167,7 @@ unset($volume); //clears something that allows it to be sorted by number of call
 // COLUMN 2
 
 // Select data from database and add to array
-$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '300' and '399' order by src, lastapp, disposition";
+$query = "SELECT * FROM $db_name.$db_table_name where DATE(calldate) = CURDATE() and CHAR_LENGTH(src) < 5 and src between '1000' and '2000' order by src, lastapp, disposition";
 
 try {
 	$sth = $dbh->query($query);
