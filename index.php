@@ -42,7 +42,7 @@ foreach ($sth as $row) {
 	$datacal[$row['src']]['Total Dur'] += $row['duration'] ;
 
 //	Total time on the phone	
-	$data[$row['src']]['Talk Time'] = date('i:s', $datacal[$row['src']]['Total Dur'] / 1);
+	$data[$row['src']]['Talk Time'] = gmdate('G:i:s', $datacal[$row['src']]['Total Dur'] );
 
 //	Unused columns (uncomment to add them back)
 //	Average Duration	
@@ -193,7 +193,7 @@ foreach ($sth as $row) {
 	$datacal[$row['src']]['Total Dur'] += $row['duration'] ;
 
 //	Total time on the phone	
-	$data[$row['src']]['Talk Time'] = date('i:s', $datacal[$row['src']]['Total Dur'] / 1);
+	$data[$row['src']]['Talk Time'] = gmdate('G:i:s', $datacal[$row['src']]['Total Dur']);
 
 //	Unused columns (uncomment to add them back)
 //	Average Duration	
